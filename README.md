@@ -177,7 +177,7 @@ Desarrollado como parte del curso de Persistencia de Datos en Android.
 
 ## 🤝 Contribuciones
 
-Este es un proyecto educativo. Las sugerencias y mejoras son bienvenidas a través de issues y pull requests.
+Este es un proyecto educativo Creado por Adrían García y Jose Aranda.
 
 ## 📚 Recursos
 
@@ -185,13 +185,3 @@ Este es un proyecto educativo. Las sugerencias y mejoras son bienvenidas a trav�
 - [DataStore](https://developer.android.com/topic/libraries/architecture/datastore)
 - [Jetpack Compose](https://developer.android.com/jetpack/compose)
 - [Material Design 3](https://m3.material.io/)
-
----
-
-**Nota**: Esta aplicación fue desarrollada con las mejores prácticas de Android moderno, incluyendo:
-- Arquitectura MVVM
-- Repository Pattern
-- Kotlin Coroutines & Flow
-- Jetpack Compose
-- Material Design 3
-- Edge-to-Edge Display
