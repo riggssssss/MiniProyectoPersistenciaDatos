@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -46,14 +47,18 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DiaryApp(repository: NoteRepository) {
     val navController = rememberNavController()
-    val viewModel: NoteViewModel = viewModel(
-        factory = object : ViewModelProvider.Factory {
+    
+    // Create factory outside of recomposition
+    val viewModelFactory = remember {
+        object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
                 return NoteViewModel(repository) as T
             }
         }
-    )
+    }
+    
+    val viewModel: NoteViewModel = viewModel(factory = viewModelFactory)
     
     NavHost(
         navController = navController,
