@@ -45,17 +45,6 @@ fun getDatabase(context: Context): NoteDatabase {
 
 La lógica comprueba si `INSTANCE` ya existe y, si no, entra en un bloque `synchronized` para que solo un hilo la cree. Se usa `context.applicationContext` para evitar fugas de memoria.
 
-## Notas prácticas y mejoras recomendadas
-
-- Migraciones: el builder mostrado crea la base de datos sin migraciones. En producción debes agregar migraciones con `.addMigrations(...)` o, si aceptas perder datos en ciertos cambios, usar `.fallbackToDestructiveMigration()` con cuidado.
-
-- Callback y pre-poblado: puedes añadir `.addCallback(...)` al `databaseBuilder` para precargar datos o ejecutar lógica al crear/abrir la DB.
-
-- Inicialización y DI: conviene acceder a la base de datos desde una clase `Application` o inyectarla con un contenedor DI (Hilt/DI personalizado) para un único punto de acceso.
-
-- Operaciones de E/S: las operaciones de base de datos deben ejecutarse fuera del hilo UI (por ejemplo, usando coroutines y `suspend` en los DAOs o `withContext(Dispatchers.IO)`).
-
-- Multi-proceso: si la app usa multiproceso, la estrategia de singleton en memoria no es suficiente; revisa la configuración de Room para multiproceso.
 
 ## Ejemplo mínimo de uso desde un `ViewModel`
 
@@ -72,7 +61,3 @@ class NotesViewModel(private val db: NoteDatabase): ViewModel() {
 ```
 
 Este ejemplo ilustra obtener el DAO y ejecutar una operación en `Dispatchers.IO` desde `viewModelScope`.
-
----
-
-Si quieres que añada esto a `README.md` en lugar de `EXPLICACION.md`, que incluya una sección de ejemplos más amplia, o que modifique la clase para añadir una migración o callback de precarga, dímelo y lo hago.
