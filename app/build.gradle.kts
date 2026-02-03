@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.miniproyecto_persistenciadatos"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.miniproyecto_persistenciadatos"
