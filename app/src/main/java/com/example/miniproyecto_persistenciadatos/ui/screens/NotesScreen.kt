@@ -6,14 +6,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.miniproyecto_persistenciadatos.data.Note
 import com.example.miniproyecto_persistenciadatos.ui.NoteViewModel
 import java.text.SimpleDateFormat
@@ -23,14 +27,22 @@ import java.util.*
 @Composable
 fun NotesScreen(
     viewModel: NoteViewModel,
-    onNavigateToAddNote: () -> Unit
+    onNavigateToAddNote: () -> Unit,
+    onNavigateToEditNote: (Int) -> Unit,
+    onNavigateToSettings: () -> Unit
 ) {
     val notes by viewModel.notes.collectAsState()
-    
+    val preferences by viewModel.userPreferences.collectAsState()
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Mi Diario Personal") }
+                title = { Text("Mi Diario Personal") },
+                actions = {
+                    IconButton(onClick = onNavigateToSettings) {
+                        Icon(Icons.Default.Settings, contentDescription = "Ajustes")
+                    }
+                }
             )
         },
         floatingActionButton = {
@@ -62,6 +74,8 @@ fun NotesScreen(
                 items(notes) { note ->
                     NoteCard(
                         note = note,
+                        fontSize = preferences.fontSize,
+                        onEditClick = { onNavigateToEditNote(note.id) },
                         onDeleteClick = { viewModel.deleteNote(note) }
                     )
                 }
@@ -73,6 +87,8 @@ fun NotesScreen(
 @Composable
 fun NoteCard(
     note: Note,
+    fontSize: Int,
+    onEditClick: () -> Unit,
     onDeleteClick: () -> Unit
 ) {
     Card(
@@ -93,33 +109,41 @@ fun NoteCard(
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.weight(1f)
                 )
-                IconButton(onClick = onDeleteClick) {
-                    Icon(
-                        Icons.Default.Delete,
-                        contentDescription = "Eliminar nota"
-                    )
+                Row {
+                    IconButton(onClick = onEditClick) {
+                        Icon(
+                            Icons.Default.Edit,
+                            contentDescription = "Editar nota"
+                        )
+                    }
+                    IconButton(onClick = onDeleteClick) {
+                        Icon(
+                            Icons.Default.Delete,
+                            contentDescription = "Eliminar nota"
+                        )
+                    }
                 }
             }
-            
+
             Spacer(modifier = Modifier.height(8.dp))
-            
+
             Text(
                 text = formatDate(note.date),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            
+
             Spacer(modifier = Modifier.height(8.dp))
-            
+
             Text(
                 text = note.content,
-                style = MaterialTheme.typography.bodyMedium,
+                style = TextStyle(fontSize = fontSize.sp),
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis
             )
-            
+
             Spacer(modifier = Modifier.height(8.dp))
-            
+
             Text(
                 text = getMoodEmoji(note.mood),
                 style = MaterialTheme.typography.headlineSmall
