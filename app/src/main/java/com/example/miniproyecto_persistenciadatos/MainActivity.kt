@@ -4,9 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.miniproyecto_persistenciadatos.data.NoteDatabase
 import com.example.miniproyecto_persistenciadatos.data.NoteRepository
@@ -21,12 +26,21 @@ class MainActivity : ComponentActivity() {
         val repository = NoteRepository(database.noteDao())
 
         setContent {
-            MiniProyectoPersistenciaDatosTheme {
+            // Inicializamos el estado con el tema del sistema por defecto
+            val systemTheme = isSystemInDarkTheme()
+            var isDarkTheme by remember { mutableStateOf(systemTheme) }
+
+            // Asegúrate de que tu MiniProyectoPersistenciaDatosTheme reciba el parámetro darkTheme
+            MiniProyectoPersistenciaDatosTheme(darkTheme = isDarkTheme) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    DiaryApp(repository)
+                    DiaryApp(
+                        repository = repository,
+                        isDarkTheme = isDarkTheme,
+                        onThemeChange = { isDarkTheme = it }
+                    )
                 }
             }
         }
